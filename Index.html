@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload and Email Validation</title>
+</head>
+<body>
+    <h1>Upload a File and Enter Your Email</h1>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+        <label for="file">File (JPEG or PNG only):</label>
+        <input type="file" name="file" accept=".jpg,.jpeg,.png" required><br><br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
