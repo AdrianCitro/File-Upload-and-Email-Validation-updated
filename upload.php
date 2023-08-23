@@ -3,10 +3,34 @@ $servername = "your_host";
 $username = "your_username";
 $password = "your_password";
 $database = "your_database";
+$recaptchaSecretKey = "SECRET_KEY";
 
 $conn = new mysqli($servername, $username, $password, $database);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
+
+    $recaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
+    $recaptchaData = array(
+        'secret' => $recaptchaSecretKey,
+        'response' => $recaptchaResponse
+    );
+
+    $recaptchaOptions = array(
+        'http' => array(
+            'method' => 'POST',
+            'content' => http_build_query($recaptchaData)
+        )
+    );
+
+    $recaptchaContext = stream_context_create($recaptchaOptions);
+    $recaptchaResult = file_get_contents($recaptchaUrl, false, $recaptchaContext);
+    $recaptchaResultData = json_decode($recaptchaResult);
+
+    if (!$recaptchaResultData->success) {
+        die("reCaptcha verification failed. Please try again.");
+    }
+
     $email = $_POST["email"];
     $role = $_POST["role"];
 
